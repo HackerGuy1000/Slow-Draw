@@ -1,8 +1,23 @@
-from utils import *
+import os,openai,random,requests,shutil,pyautogui
+from utils import * 
+from skimage import io
+from artif import generatePrompt, generateImage
+from threading import Thread
+import matplotlib
+from screenshotting import saveImage
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Drawing Program")
+pygame.display.set_caption("Slow Draw")
 
+
+prompt = generatePrompt()
+
+
+
+font = pygame.font.Font('freesansbold.ttf', 15)
+text = font.render(prompt, True, (0, 0, 0), (255, 255, 255))
+textRect = text.get_rect()
+textRect.center = (WIDTH/2, textRect.height)
 
 def init_grid(rows, cols, color):
     grid = []
@@ -34,6 +49,8 @@ def draw_grid(win, grid):
 def draw(win, grid, buttons):
     win.fill(BG_COLOR)
     draw_grid(win, grid)
+    win.blit(text, textRect)
+
 
     for button in buttons:
         button.draw(win)
@@ -63,9 +80,20 @@ buttons = [
     Button(70, button_y, 50, 50, RED),
     Button(130, button_y, 50, 50, GREEN),
     Button(190, button_y, 50, 50, BLUE),
-    Button(250, button_y, 50, 50, WHITE, "Erase", BLACK),
-    Button(310, button_y, 50, 50, WHITE, "Clear", BLACK)
+    Button(250,button_y,50,50,ORANGE),
+    Button(250,button_y,50,50,YELLOW),
+    Button(310,button_y,50,50,ORANGE),
+    Button(370,button_y,50,50,PURPLE),
+    Button(430,button_y,50,50,BROWN),
+    Button(490, button_y, 50, 50, WHITE, "Erase", BLACK),
+    Button(550, button_y, 50, 50, WHITE, "Clear", BLACK),
+    Button(610, button_y, 50, 50, WHITE, "Done", BLACK)
 ]
+
+
+gamePlaying = True
+
+Thread(target=generateImage(prompt)).start()
 
 while run:
     clock.tick(FPS)
@@ -89,7 +117,30 @@ while run:
                     if button.text == "Clear":
                         grid = init_grid(ROWS, COLS, BG_COLOR)
                         drawing_color = BLACK
+                    if button.text == "Done": 
+                        saveImage()
+                        userImg = io.imread("/Users/tylerphilip/Desktop/Visual_Studios_Coding_Projects/Roslyn_Coding_Competition/screenshot.png")
+                        io.imshow(userImg)
+                        # generateImage(prompt)
+                        run = False
 
+    
     draw(WIN, grid, buttons)
+       
+run = True
+pygame.Surface.fill(WIN, WHITE)
+generatedImg = pygame.image.load("generatedImg.png").convert()
+generatedImg =pygame.transform.scale(generatedImg,(300,300))
+WIN.blit(generatedImg,(150,0))
 
-pygame.quit()
+userImg = pygame.image.load("/Users/tylerphilip/Desktop/Visual_Studios_Coding_Projects/Roslyn_Coding_Competition/screenshot.png").convert()
+userImg =pygame.transform.scale(userImg,(400,400))
+WIN.blit(userImg,(150,400))
+pygame.display.update()
+
+
+
+while run:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
