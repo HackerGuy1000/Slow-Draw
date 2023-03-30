@@ -119,7 +119,7 @@ while run:
                         drawing_color = BLACK
                     if button.text == "Done": 
                         saveImage()
-                        userImg = io.imread("/Users/tylerphilip/Desktop/Visual_Studios_Coding_Projects/Roslyn_Coding_Competition/screenshot.png")
+                        userImg = io.imread("generatedImg.png")
                         io.imshow(userImg)
                         # generateImage(prompt)
                         run = False
@@ -133,7 +133,7 @@ generatedImg = pygame.image.load("generatedImg.png").convert()
 generatedImg =pygame.transform.scale(generatedImg,(300,300))
 WIN.blit(generatedImg,(150,0))
 
-userImg = pygame.image.load("/Users/tylerphilip/Desktop/Visual_Studios_Coding_Projects/Roslyn_Coding_Competition/screenshot.png").convert()
+userImg = pygame.image.load("screenshot.png").convert()
 userImg =pygame.transform.scale(userImg,(400,400))
 WIN.blit(userImg,(150,400))
 pygame.display.update()
