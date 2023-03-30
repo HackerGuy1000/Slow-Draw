@@ -1,4 +1,4 @@
-# PythonPaintProgram
+# PythonPaintProgram - Credit to thise video for the basic drawing system: https://www.youtube.com/watch?v=N20eXcfyQ_4&pp=ygUMcGFpbnQgcHl0aG9u
 
 ## Dependencies
 
